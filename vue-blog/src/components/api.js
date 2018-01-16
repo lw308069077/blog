@@ -8,8 +8,8 @@ export default {
       async sub(params) {
           console.log('11111111111')
         try {
-          let res = await this.$http.post(`/cmp/v1/api/user/register`, params)
-          console.log(res.data.data)
+          let res = await this.$http.post(`/test/api/user/register`, params)
+          console.log(JSON.stringify(res)+"=========")
           return res.data.data
         } catch (res) {
           console.log(res)
