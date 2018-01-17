@@ -13,6 +13,8 @@ router.use((req,res,next) => {
 
 // 用户注册
 router.post('/user/register',(req,res,next) => {
+    console.log("123")
+    console.log(req.body)
     let username = req.body.username
     let password = req.body.password
     let repassword = req.body.repassword

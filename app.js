@@ -22,7 +22,8 @@ swig.setDefaults({cache: false})
 
 
 //bodyParser设置
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))
 
 // app.get('/', (req, res, next) => {
 //     //读取views目录下的指定文件

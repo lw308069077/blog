@@ -11,10 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/test': {
-        target: 'http://192.168.135.64:8080',
+      '/restful': {
+        target : 'http://localhost:8080',
+        changeOrigin:true, //允许跨域请求
         pathRewrite: {
-          '^/test': ''
+          '^/restful': ''
         }
       }
     },
