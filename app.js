@@ -5,6 +5,8 @@ const swig = require('swig')
 const mongoose = require('mongoose')
 //加载body-parser,用来处理post提交过来的数据
 const bodyParser = require('body-parser')
+//加载cookies模块
+const cookies = require('cookies')
 
 let app = express()
 
@@ -17,13 +19,19 @@ app.engine('html', swig.renderFile)
 app.set('views', './views')
 //注册使用的模板引擎
 app.set('view engine', 'html')
-//开发过程中消模板缓存
+//开发过程中取消模板缓存
 swig.setDefaults({cache: false})
 
-
 //bodyParser设置
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+//设置cookie
+app.use(function(req,res,next){
+    req.cookies = new cookies(req, res)
+    
+    next()
+})
 
 // app.get('/', (req, res, next) => {
 //     //读取views目录下的指定文件
