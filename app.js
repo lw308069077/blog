@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 //加载body-parser,用来处理post提交过来的数据
 const bodyParser = require('body-parser')
 //加载cookies模块
-const cookies = require('cookies')
+var cookieParser = require('cookie-parser')
 
 let app = express()
 
@@ -27,16 +27,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //设置cookie
-app.use(function(req,res,next){
-    req.cookies = new cookies(req, res)
-    
-    next()
+app.use(cookieParser())
+
+app.use(function(req,res,next) {
+    console.log(req.cookies)
+    // if(req.cookie.userInfo){
+    //     next()
+    // }else{
+
+    // }
 })
 
 // app.get('/', (req, res, next) => {
 //     //读取views目录下的指定文件
 //     res.render('index')
 // })
+
 
 //根据不同的功能划分模块
 app.use('/admin',require('./routers/admin'))

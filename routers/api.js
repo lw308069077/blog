@@ -88,10 +88,14 @@ router.post('/user/login', (req, res, next) => {
             _id: userInfo._id,
             username: userInfo.username
         }
-        req.cookies.set('userInfo',JSON.stringify({
-            _id: userInfo._id,
-            username: userInfo.username
-        }))
+        
+console.log(responseData.userInfo+"===~~~~~~~~~~~")
+        res.cookie('user', responseData.userInfo, {
+            path: '/',
+            maxAge: 1000*60*60
+        });
+
+        // req.session.user = userInfo
         res.json(responseData)
         return
     })

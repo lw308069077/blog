@@ -4,14 +4,11 @@
         <el-header>Header</el-header>
         <el-main>
             <el-row :gutter="20">
-                <el-col :span="16">
+                <el-col :span="18">
                     123123
                 </el-col>
-                <el-col class="loginBox" :span="8">
-                    <el-tabs type="border-card">
-                        <el-tab-pane label="用户登录"><login></login></el-tab-pane>
-                        <el-tab-pane label="用户注册"><register></register></el-tab-pane>
-                    </el-tabs>
+                <el-col class="loginBox" :span="6">
+                    <register></register>
                 </el-col>
             </el-row>
         </el-main>

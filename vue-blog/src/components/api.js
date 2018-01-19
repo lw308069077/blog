@@ -18,6 +18,7 @@ export default {
     async login(param) {
       try {
         let res = await this.$http.post(`/restful/api/user/login`, param)
+        console.log(res.data)
         return res.data
       } catch (res) {
         console.log(res)
