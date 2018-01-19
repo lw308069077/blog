@@ -35,7 +35,7 @@
       <el-card class="box-card" v-if="loging">
         <div slot="header" class="clearfix">
           <span>用户信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text">退出登录</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="logOuting">退出登录</el-button>
         </div>
         <div class="text item">
           <p>用户名:{{user}}</p>
@@ -114,7 +114,7 @@ export default {
       if (valid) {
         let result = {};
         if (this.isLogin) {
-          result = await this.login(this.ruleForm2);
+          result = await this.login(this.ruleForm2)
           if (result.code === 0) {
             setTimeout(() => {
               this.loging = true
@@ -122,7 +122,7 @@ export default {
             }, 1500);
           }
         } else {
-          result = await this.register(this.ruleForm2);
+          result = await this.register(this.ruleForm2)
           if (result.code === 0) {
             setTimeout(() => {
               this.isLogin = true;
@@ -140,6 +140,12 @@ export default {
         console.log("error submit!!");
         return false;
       }
+    },
+    async logOuting(){
+        let result = await this.logOut()
+        if(result.code === 0){
+          this.user = ''
+        }
     }
   }
 };
@@ -160,6 +166,6 @@ export default {
   text-align: left;
 }
 .box-card .text p {
-  font-size:14px;
+  font-size: 14px;
 }
 </style>

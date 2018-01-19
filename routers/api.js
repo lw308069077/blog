@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 
-let responseData
+var responseData
 router.use((req, res, next) => {
     responseData = {
         code: 0,
@@ -60,6 +60,7 @@ router.post('/user/register', (req, res, next) => {
     })
 })
 
+//用户登陆
 router.post('/user/login', (req, res, next) => {
     let username = req.body.username
     let password = req.body.password
@@ -88,17 +89,32 @@ router.post('/user/login', (req, res, next) => {
             _id: userInfo._id,
             username: userInfo.username
         }
-        
-console.log(responseData.userInfo+"===~~~~~~~~~~~")
-        res.cookie('user', responseData.userInfo, {
+
+        res.cookie('user', {
+            id: userInfo._id,
+            name: userInfo.username
+        }, {
             path: '/',
             maxAge: 1000*60*60
         });
 
         // req.session.user = userInfo
         res.json(responseData)
-        return
     })
+})
+
+//用户退出
+router.get('/logout',function(req,res,next) {
+    res.cookie('user',{},{
+        path: '/',
+        maxAge: -1
+    })
+
+    responseData = {
+        code: 0,
+        message: ''
+    }
+    res.json(responseData)
 })
 
 module.exports = router

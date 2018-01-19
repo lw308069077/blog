@@ -29,18 +29,18 @@ app.use(bodyParser.json())
 //设置cookie
 app.use(cookieParser())
 
-app.use(function(req,res,next) {
-    console.log(req.cookies)
-    // if(req.cookie.userInfo){
-    //     next()
-    // }else{
+// app.get('/api', function(req, res) {
+//     console.log('Cookies: ', req.cookies)
+//   })
 
-    // }
-})
 
-// app.get('/', (req, res, next) => {
-//     //读取views目录下的指定文件
-//     res.render('index')
+// app.use(function(req,res,next) {
+//     console.log(req.cookies)
+//     if(req.cookies.user){
+//         next()
+//     }else{
+
+//     }
 // })
 
 

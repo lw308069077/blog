@@ -4,10 +4,10 @@
         <el-header>Header</el-header>
         <el-main>
             <el-row :gutter="20">
-                <el-col :span="18">
+                <el-col :span="12">
                     123123
                 </el-col>
-                <el-col class="loginBox" :span="6">
+                <el-col class="loginBox" :span="12">
                     <register></register>
                 </el-col>
             </el-row>
