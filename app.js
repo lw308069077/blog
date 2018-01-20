@@ -10,6 +10,8 @@ var cookieParser = require('cookie-parser')
 
 let app = express()
 
+let User = require('./models/User')
+
 //设置静态文件托管
 app.use('/public',express.static(__dirname + '/public'))
 
@@ -29,20 +31,26 @@ app.use(bodyParser.json())
 //设置cookie
 app.use(cookieParser())
 
-// app.get('/api', function(req, res) {
-//     console.log('Cookies: ', req.cookies)
-//   })
-
-
-// app.use(function(req,res,next) {
-//     console.log(req.cookies)
-//     if(req.cookies.user){
-//         next()
-//     }else{
-
-//     }
-// })
-
+app.use(function(req,res,next) {
+    req.userInfo = {}
+    if(req.cookies.user){
+        req.userInfo = req.cookies.user
+        User.findById(req.userInfo.id).then(function(userInfo){
+            req.userInfo.isAdmin = userInfo.isAdmin
+            console.log(req.userInfo)
+        })
+        next()
+    }else{
+        if(req.originalUrl == '/api/user/register' || req.originalUrl == '/api/user/login' || req.originalUrl == '/api/logout') {
+            next()
+        }else{
+            res.json({
+                code: -1,
+                message: '当前未登录'
+            })
+        }
+    }
+})
 
 //根据不同的功能划分模块
 app.use('/admin',require('./routers/admin'))

@@ -103,6 +103,9 @@ export default {
       }
     };
   },
+  mounted() {
+    this.checkLogining()
+  },
   methods: {
     async submitForm(formName) {
       let valid = await new Promise(resolve => {
@@ -119,14 +122,14 @@ export default {
             setTimeout(() => {
               this.loging = true
               this.user = result.userInfo.username
-            }, 1500);
+            }, 500);
           }
         } else {
           result = await this.register(this.ruleForm2)
           if (result.code === 0) {
             setTimeout(() => {
               this.isLogin = true;
-            }, 1500);
+            }, 500);
           }
         }
 
@@ -135,7 +138,7 @@ export default {
 
         setTimeout(() => {
           this.msg = false;
-        }, 1500);
+        }, 500);
       } else {
         console.log("error submit!!");
         return false;
@@ -145,7 +148,15 @@ export default {
         let result = await this.logOut()
         if(result.code === 0){
           this.user = ''
+          this.loging = false
         }
+    },
+    async checkLogining(){
+      let res = await this.checkLogin()
+      if(res.code === 0){
+        this.user = res.result.name
+        this.loging = true
+      }
     }
   }
 };

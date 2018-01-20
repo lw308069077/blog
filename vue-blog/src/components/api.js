@@ -34,6 +34,16 @@ export default {
       } catch (res) {
         console.log(res)
       }
+    },
+    /* 校验登录状态 */
+    async checkLogin() {
+      try {
+        let res = await this.$http.get(`/restful/api/checkLogin`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
     }
   }
 }

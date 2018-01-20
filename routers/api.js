@@ -77,6 +77,7 @@ router.post('/user/login', (req, res, next) => {
         username: username,
         password: password
     }).then(function (userInfo) {
+        
         if (!userInfo) {
             responseData.code = 2
             responseData.message = '用户名或密码错误'
@@ -115,6 +116,23 @@ router.get('/logout',function(req,res,next) {
         message: ''
     }
     res.json(responseData)
+})
+
+//校验登录状态
+router.get('/checkLogin',function(req,res,next) {
+    if(req.cookies.user){
+        res.json({
+            code: 0,
+            message: '',
+            result: req.cookies.user || {}
+        })
+    }else{
+        res.json({
+            code: 1,
+            message: '未登录',
+            result: ''
+        })
+    }
 })
 
 module.exports = router
