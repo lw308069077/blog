@@ -44,6 +44,16 @@ export default {
       } catch (res) {
         console.log(res)
       }
+    },
+    /* 获取用户列表 */
+    async getUsers() {
+      try {
+        let res = await this.$http.get(`/restful/api/user`)
+        console.log(res.data.result)
+        return res.data.result
+      } catch (res) {
+        console.log(res)
+      }
     }
   }
 }

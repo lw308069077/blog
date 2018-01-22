@@ -39,7 +39,8 @@
         </div>
         <div class="text item">
           <p>用户名:{{user}}</p>
-          <p>您好,欢迎光临我的博客!</p>
+          <p v-if="!isAdmin">您好,欢迎光临我的博客!</p>
+          <p v-if="isAdmin">您好,管理员!<router-link to="/admin">欢迎进入</router-link></p>
         </div>
       </el-card>
     </div>
@@ -79,6 +80,7 @@ export default {
       }
     };
     return {
+      isAdmin: false,
       user:'',
       id:null,
       loging: false,
@@ -122,6 +124,7 @@ export default {
             setTimeout(() => {
               this.loging = true
               this.user = result.userInfo.username
+              this.isAdmin = result.userInfo.isAdmin
             }, 500);
           }
         } else {
@@ -156,6 +159,7 @@ export default {
       if(res.code === 0){
         this.user = res.result.name
         this.loging = true
+        this.isAdmin = res.result.isAdmin
       }
     }
   }

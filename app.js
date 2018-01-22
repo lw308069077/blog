@@ -35,10 +35,6 @@ app.use(function(req,res,next) {
     req.userInfo = {}
     if(req.cookies.user){
         req.userInfo = req.cookies.user
-        User.findById(req.userInfo.id).then(function(userInfo){
-            req.userInfo.isAdmin = userInfo.isAdmin
-            console.log(req.userInfo)
-        })
         next()
     }else{
         if(req.originalUrl == '/api/user/register' || req.originalUrl == '/api/user/login' || req.originalUrl == '/api/logout') {

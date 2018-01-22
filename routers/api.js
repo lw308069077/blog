@@ -88,7 +88,8 @@ router.post('/user/login', (req, res, next) => {
         responseData.message = '登录成功'
         responseData.userInfo = {
             _id: userInfo._id,
-            username: userInfo.username
+            username: userInfo.username,
+            isAdmin: userInfo.isAdmin
         }
 
         res.cookie('user', {
@@ -121,10 +122,13 @@ router.get('/logout',function(req,res,next) {
 //校验登录状态
 router.get('/checkLogin',function(req,res,next) {
     if(req.cookies.user){
-        res.json({
-            code: 0,
-            message: '',
-            result: req.cookies.user || {}
+        User.findById(req.userInfo.id).then(function(userInfo){
+            req.userInfo.isAdmin = userInfo.isAdmin
+            res.json({
+                code: 0,
+                message: '',
+                result: req.userInfo || {}
+            })
         })
     }else{
         res.json({
@@ -133,6 +137,21 @@ router.get('/checkLogin',function(req,res,next) {
             result: ''
         })
     }
+})
+
+//获取用户列表
+router.get('/user',function(req,res,next){
+    let page = parseInt(req.query.page) || 1
+    let limit = 1
+    let skip = (page - 1) * limit
+console.log(page+"~~~~~~~~~~~~~~~~~")
+    User.find().limit(limit).skip(skip).then(function(userInfo){
+        res.json({
+            code: 0,
+            message: '',
+            result: userInfo
+        })
+    })
 })
 
 module.exports = router
