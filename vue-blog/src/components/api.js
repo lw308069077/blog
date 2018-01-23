@@ -49,8 +49,8 @@ export default {
     async getUsers() {
       try {
         let res = await this.$http.get(`/restful/api/user`)
-        console.log(res.data.result)
-        return res.data.result
+        console.log(res.data)
+        return res.data
       } catch (res) {
         console.log(res)
       }

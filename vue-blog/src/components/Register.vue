@@ -124,7 +124,7 @@ export default {
             setTimeout(() => {
               this.loging = true
               this.user = result.userInfo.username
-              this.isAdmin = result.userInfo.isAdmin
+              result.userInfo.isAdmin === 'false' ? this.isAdmin = false : this.isAdmin=true
             }, 500);
           }
         } else {
@@ -159,7 +159,7 @@ export default {
       if(res.code === 0){
         this.user = res.result.name
         this.loging = true
-        this.isAdmin = res.result.isAdmin
+        res.result.isAdmin === 'false' ? this.isAdmin = false : this.isAdmin=true
       }
     }
   }

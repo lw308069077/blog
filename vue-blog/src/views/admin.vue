@@ -36,7 +36,6 @@
             <el-table-column prop="isAdmin" label="是否管理员" show-overflow-tooltip min-width="150"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
                     <el-button type="text" size="small">编辑</el-button>
                 </template>
             </el-table-column>
@@ -44,11 +43,11 @@
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :current-page="pageNo"
+            :page-sizes="[1, 2, 5, 10]"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400">
+            :total="total">
         </el-pagination>
       </div>
   </div>
@@ -61,7 +60,10 @@ export default {
   mixins: [api],
   data() {
     return {
-      currentPage4: 4,
+      total: 0,
+      pageNo: 1, // 当前页码
+      pageSize: 2, // 每页记录数
+      datas:{},
       tabaDatas: [],
       activeIndex2: "1",
     };
@@ -71,7 +73,7 @@ export default {
   },
   methods: {
     async getUsersList(){
-        this.tabaDatas = await this.getUsers()
+        this.datas = await this.getUsers()
     },
     logOuting(){
         this.$confirm('是否退出后台管理?', '提示', {
@@ -96,11 +98,22 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+    // 分页设置
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.pageNo = 1
+      this.getUsersList()
     },
-    handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+    // 分页设置
+    handleCurrentChange (val) {
+      this.pageNo = val
+      this.getUsersList()
+    }
+  },
+  watch: {
+    datas: function () {
+      this.tableData = this.datas.result
+      this.total = this.datas.count
     }
   }
 };
