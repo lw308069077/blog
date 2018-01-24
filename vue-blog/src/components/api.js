@@ -46,9 +46,9 @@ export default {
       }
     },
     /* 获取用户列表 */
-    async getUsers() {
+    async getUsers(param) {
       try {
-        let res = await this.$http.get(`/restful/api/user`)
+        let res = await this.$http.get(`/restful/api/user`,{params: param})
         console.log(res.data)
         return res.data
       } catch (res) {

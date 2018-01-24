@@ -5,7 +5,7 @@
         <el-main>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    123123
+                    内容区域
                 </el-col>
                 <el-col class="loginBox" :span="12">
                     <register></register>
@@ -18,12 +18,10 @@
 </template>
 
 <script>
-import Login from '@/components/Login'
 import Register from '@/components/Register'
 
 export default {
     components:{
-        Login,
         Register
     },
     data() {

@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/views/index'
 import Admin from '@/views/admin'
+import UsersList from '@/components/UsersList'
+import Category from '@/components/Category'
+import AddCategory from '@/components/AddCategory'
+
 
 Vue.use(Router)
 
@@ -9,14 +13,36 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
       component: Index
     },
     {
       path: '/admin',
-      name: 'Admin',
-      component: Admin
-    },
+      component: Admin,
+      children: [
+        {
+          path: '/',
+          redirect: 'usersList'
+        },
+        { 
+          path: 'usersList',
+          component: UsersList
+        },
+        { 
+          path: 'category',
+          component: Category,
+          children: [
+            // {
+            //   path: '/',
+            //   redirect: 'add'
+            // },
+            {
+              path: 'add',
+              component: AddCategory
+            }
+          ]
+        }
+      ]
+    }
   ]
 })
 

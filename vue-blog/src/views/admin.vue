@@ -11,45 +11,24 @@
         <div class="logo">
             <router-link to="/admin">后台管理</router-link>
         </div>
-        <el-menu-item index="1">
-            用户管理
+
+        <el-menu-item @click="$router.push('/admin/UsersList')" index="1">
+          用户管理
         </el-menu-item>
-        <el-submenu class="rtBox" index="3">
+
+        <el-submenu index="2">
+            <template slot="title">分类管理</template>
+            <el-menu-item index="2-1" @click="$router.push('/admin/category')">分类首页</el-menu-item>
+            <el-menu-item index="2-2" @click="$router.push('/admin/category/add')">分类添加</el-menu-item>
+        </el-submenu>
+
+        <el-submenu class="rtBox" index="x">
             <template slot="title">admin</template>
-            <el-menu-item index="3-1" @click="logOuting">退出</el-menu-item>
+            <el-menu-item index="x-1" @click="logOuting">退出</el-menu-item>
         </el-submenu>
       </el-menu>
-        
-      <div class="sourceBox">
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-        </el-breadcrumb>      
-      </div>
-
-      <div class="tabBox">
-          <h3>用户列表</h3>
-          <el-table :data="tabaDatas" stripe border show-overflow-tooltip min-width="200">
-            <el-table-column prop="_id" label="ID" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column prop="username" label="用户名" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column prop="password" label="密码" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column prop="isAdmin" label="是否管理员" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
-                <template slot-scope="scope">
-                    <el-button type="text" size="small">编辑</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="pageNo"
-            :page-sizes="[1, 2, 5, 10]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total">
-        </el-pagination>
-      </div>
+      
+      <router-view></router-view>
   </div>
 </template>
 
@@ -60,60 +39,32 @@ export default {
   mixins: [api],
   data() {
     return {
-      total: 0,
-      pageNo: 1, // 当前页码
-      pageSize: 2, // 每页记录数
-      datas:{},
-      tabaDatas: [],
-      activeIndex2: "1",
+      activeIndex2: "1"
     };
   },
-  mounted(){
-      this.getUsersList()
-  },
   methods: {
-    async getUsersList(){
-        this.datas = await this.getUsers()
-    },
-    logOuting(){
-        this.$confirm('是否退出后台管理?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let result = this.logOut()
-          console.log('退出：'+ JSON.stringify(result))
-        
-          this.$message({
-            type: 'success',
-            message: '退出成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          });          
-        });
-    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
-    // 分页设置
-    handleSizeChange (val) {
-      this.pageSize = val
-      this.pageNo = 1
-      this.getUsersList()
-    },
-    // 分页设置
-    handleCurrentChange (val) {
-      this.pageNo = val
-      this.getUsersList()
-    }
-  },
-  watch: {
-    datas: function () {
-      this.tableData = this.datas.result
-      this.total = this.datas.count
+    //退出
+    logOuting() {
+      this.$confirm("是否退出后台管理?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        let result = this.logOut();
+        this.$message({
+          type: "success",
+          message: "退出成功!"
+        });        
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消退出"
+        })
+      })
     }
   }
 };
@@ -131,23 +82,10 @@ export default {
   font-size: 20px;
   text-decoration: none;
 }
-.el-menu--horizontal .el-submenu {
+.rtBox.el-submenu {
   float: right;
 }
 .el-submenu .el-menu-item {
   min-width: 100px;
-}
-.sourceBox {
-  padding: 24px;
-}
-.tabBox {
-  padding: 0 24px;
-}
-.tabBox {
-  text-align: left;
-}
-.el-pagination {
-    margin-top:20px;
-    text-align: right;
 }
 </style>

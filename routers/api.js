@@ -141,33 +141,23 @@ router.get('/checkLogin',function(req,res,next) {
 
 //获取用户列表
 router.get('/user',function(req,res,next){
-    let page = parseInt(req.param("page"));
-console.log(page+'=======================================')
-    // let page = Number(req.query.page || 1)
-    let limit = 2
-    let pages = 0
+    let page = parseInt(req.param("page"))
+    let pageSize = parseInt(req.param("pageSize"))
+    let skip = (page - 1) * pageSize
+    let params = {}
+
+    let userModel = User.find(params).skip(skip).limit(pageSize)
 
     User.count().then(function(count){
-        //计算总页数
-        pages = Math.ceil(count / limit)
-        //取值不能超过pages
-        page = Math.min(page, pages)
-        //取值不能小于1
-        page = Math.max(page, 1)
-
-        let skip = (page - 1) * limit
-
-        User.find().limit(limit).skip(skip).then(function(userInfo){
+        userModel.exec(function(err,doc){
             res.json({
                 code: 0,
                 message: '',
-                result: userInfo
+                result: doc,
+                count: count
             })
         })
-
     })
-
-    
 })
 
 module.exports = router
