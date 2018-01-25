@@ -54,6 +54,16 @@ export default {
       } catch (res) {
         console.log(res)
       }
-    }
+    },
+    /* 添加分类 */
+    async addCategory(param) {
+      try {
+        let res = await this.$http.post(`/restful/api/category/add`, param)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
   }
 }

@@ -30,16 +30,20 @@ let router = new Router({
         { 
           path: 'category',
           component: Category,
-          children: [
-            // {
-            //   path: '/',
-            //   redirect: 'add'
-            // },
-            {
-              path: 'add',
-              component: AddCategory
-            }
-          ]
+          // children: [
+          //   {
+          //     path: '/',
+          //     redirect: 'add'
+          //   },
+          //   {
+          //     path: 'add',
+          //     component: AddCategory
+          //   }
+          // ]
+        },
+        { 
+          path: 'add',
+          component: AddCategory,
         }
       ]
     }

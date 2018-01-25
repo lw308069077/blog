@@ -8,9 +8,9 @@
         </el-breadcrumb>      
       </div>
       
-      <div>
+      <div class="tabBox">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="活动名称" prop="name">
+          <el-form-item label="分类名称" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item>
@@ -33,23 +33,55 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入分类名称', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
+    async submitForm(formName) {//addCategory
+        let valid = await new Promise(resolve => {
+          this.$refs[formName].validate(valid => {
+            resolve(valid);
+          });
         });
-      },
+
+        if (valid) {
+          console.log(this.ruleForm)
+          let result = await this.addCategory(this.ruleForm)
+console.log(result)
+
+          // let result = {};
+          // if (this.isLogin) {
+          //   result = await this.login(this.ruleForm2)
+          //   if (result.code === 0) {
+          //     setTimeout(() => {
+          //       this.loging = true
+          //       this.user = result.userInfo.username
+          //       result.userInfo.isAdmin === 'false' ? this.isAdmin = false : this.isAdmin=true
+          //     }, 500);
+          //   }
+          // } else {
+          //   result = await this.register(this.ruleForm2)
+          //   if (result.code === 0) {
+          //     setTimeout(() => {
+          //       this.isLogin = true;
+          //     }, 500);
+          //   }
+          // }
+
+          // this.msgText = result.message;
+          // this.msg = true;
+
+          // setTimeout(() => {
+          //   this.msg = false;
+          // }, 500);
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      }
   }
 };
 </script>

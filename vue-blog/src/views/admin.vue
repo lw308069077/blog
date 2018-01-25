@@ -19,7 +19,7 @@
         <el-submenu index="2">
             <template slot="title">分类管理</template>
             <el-menu-item index="2-1" @click="$router.push('/admin/category')">分类首页</el-menu-item>
-            <el-menu-item index="2-2" @click="$router.push('/admin/category/add')">分类添加</el-menu-item>
+            <el-menu-item index="2-2" @click="$router.push('/admin/add')">分类添加</el-menu-item>
         </el-submenu>
 
         <el-submenu class="rtBox" index="x">

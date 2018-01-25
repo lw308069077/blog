@@ -8,8 +8,8 @@
       </div>
 
       <div class="tabBox">
-        <h3>用户列表</h3>
-        <el-table :data="tabaDatas" stripe border show-overflow-tooltip min-width="200">
+        <h3>分类列表</h3>
+        <!-- <el-table :data="tabaDatas" stripe border show-overflow-tooltip min-width="200">
             <el-table-column prop="_id" label="ID" show-overflow-tooltip min-width="150"></el-table-column>
             <el-table-column prop="username" label="用户名" show-overflow-tooltip min-width="150"></el-table-column>
             <el-table-column prop="password" label="密码" show-overflow-tooltip min-width="150"></el-table-column>
@@ -19,8 +19,8 @@
                     <el-button type="text" size="small">编辑</el-button>
                 </template>
             </el-table-column>
-        </el-table>
-        <el-pagination
+        </el-table> -->
+        <!-- <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="pageNo"
@@ -28,7 +28,7 @@
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
-        </el-pagination>
+        </el-pagination> -->
       </div>
     </div>
 </template>
