@@ -39,7 +39,15 @@ export default {
       }
     }
   },
+  created(){
+      this.$root.$on('editName', (editObj) => {
+        console.log(editObj.name)
+        this.ruleForm.name = editObj.name
+        console.log(this.ruleForm.name+'=============')
+      })
+  },
   methods: {
+
     async submitForm(formName) {//addCategory
         let valid = await new Promise(resolve => {
           this.$refs[formName].validate(valid => {
@@ -48,40 +56,27 @@ export default {
         });
 
         if (valid) {
-          console.log(this.ruleForm)
           let result = await this.addCategory(this.ruleForm)
-console.log(result)
-
-          // let result = {};
-          // if (this.isLogin) {
-          //   result = await this.login(this.ruleForm2)
-          //   if (result.code === 0) {
-          //     setTimeout(() => {
-          //       this.loging = true
-          //       this.user = result.userInfo.username
-          //       result.userInfo.isAdmin === 'false' ? this.isAdmin = false : this.isAdmin=true
-          //     }, 500);
-          //   }
-          // } else {
-          //   result = await this.register(this.ruleForm2)
-          //   if (result.code === 0) {
-          //     setTimeout(() => {
-          //       this.isLogin = true;
-          //     }, 500);
-          //   }
-          // }
-
-          // this.msgText = result.message;
-          // this.msg = true;
-
-          // setTimeout(() => {
-          //   this.msg = false;
-          // }, 500);
+          if(result.code === 0) {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.$router.push('/admin/category')
+          }else{
+            this.$message({
+              message: result.message,
+              type: 'error'
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;
         }
       }
+  },
+  beforeDestroy() {
+
   }
 };
 </script>

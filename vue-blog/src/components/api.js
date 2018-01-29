@@ -65,5 +65,25 @@ export default {
         console.log(res)
       }
     },
+    /* 获取分类列表 */
+    async getCategory(param) {
+      try {
+        let res = await this.$http.get(`/restful/api/category`,{params: param})
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    /* 修改分类列表 */
+    async editCategory(id) {
+      try {
+        let res = await this.$http.get(`/restful/api/category/edit?id=${id}`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
   }
 }
