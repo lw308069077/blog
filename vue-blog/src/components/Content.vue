@@ -3,15 +3,15 @@
       <div class="sourceBox">
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>分类管理</el-breadcrumb-item>
+            <el-breadcrumb-item>文章管理</el-breadcrumb-item>
         </el-breadcrumb>      
       </div>
 
       <div class="tabBox">
-        <el-button type="primary" class="addCategory" @click="add">添加分类</el-button>
+        <el-button type="primary" class="addArticle" @click="add">文章添加</el-button>
         <el-table :data="tabaDatas" stripe border show-overflow-tooltip min-width="200">
             <el-table-column prop="_id" label="ID" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column prop="name" label="分类名称" show-overflow-tooltip min-width="150"></el-table-column>
+            <el-table-column prop="name" label="文章名称" show-overflow-tooltip min-width="150"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
@@ -31,10 +31,21 @@
       </div>
 
       <el-dialog :title="ruleForm.tit" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
-            <el-input v-model="ruleForm.name" auto-complete="off"></el-input>
-          </el-form-item>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="formLabelWidth" class="demo-ruleForm">
+            <el-form-item label="文章分类">
+                <el-select class="slct" v-model="ruleForm.region" placeholder="请选择文章分类">
+                    <el-option v-for="(option,index) in navList" :label="option.name" :key="index" :value="option._id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="文章标题">
+                <el-input v-model="ruleForm.name" placeholder="请输入文章标题"></el-input>
+            </el-form-item>
+            <el-form-item label="文章简介">
+                <el-input type="textarea" v-model="ruleForm.desc" placeholder="请输入文章简介"></el-input>
+            </el-form-item>
+            <el-form-item label="文章内容">
+                <el-input type="textarea" v-model="ruleForm.content" placeholder="请输入文章内容"></el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -52,10 +63,13 @@ export default {
   data() {
     return {
       ruleForm: {
-        tit: '添加分类',
+        tit: '添加文章',
         name: '',
         type: 'isAdd',
-        id: ''
+        id: '',
+        region:'',
+        desc: '',
+        content: ''
       },
       formLabelWidth: '80px',
       dialogFormVisible: false,
@@ -64,6 +78,8 @@ export default {
       pageSize: 2, // 每页记录数
       datas:{},
       tabaDatas: [],
+      Categorys:{},
+      navList:[],
       rules: {
         name: [
           { required: true, message: '请输入分类名称', trigger: 'blur' },
@@ -72,7 +88,8 @@ export default {
       }
     };
   },
-  mounted(){
+  async mounted(){
+    this.Categorys = await this.getCategoryNav()
     this.getCategoryList()
   },
   methods: {
@@ -87,7 +104,7 @@ export default {
       if (valid) {
         let result
         if(this.ruleForm.type === 'isAdd') {
-          result = await this.addCategory(this.ruleForm)
+          result = await this.addContent(this.ruleForm)
         }else{
           result = await this.editCategorySave(this.ruleForm)
         }
@@ -174,6 +191,9 @@ export default {
     datas: function () {
       this.tabaDatas = this.datas.result
       this.total = this.datas.count
+    },
+    Categorys: function() {
+      this.navList = this.Categorys.result
     }
   }
 };
@@ -191,7 +211,10 @@ export default {
   margin-top: 20px;
   text-align: right;
 }
-.addCategory {
+.addArticle {
   margin-bottom:20px;
+}
+.slct {
+    width: 100%;
 }
 </style>

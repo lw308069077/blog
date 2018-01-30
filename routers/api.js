@@ -307,4 +307,9 @@ router.get('/categoryNav',function(req,res,next){
     })
 })
 
+// 文章内容保存
+router.post('/content/add',function(req,res,next){
+    console.log(req.body)
+})
+
 module.exports = router

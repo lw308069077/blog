@@ -4,6 +4,7 @@ import Index from '@/views/index'
 import Admin from '@/views/admin'
 import UsersList from '@/components/UsersList'
 import Category from '@/components/Category'
+import Content from '@/components/Content'
 
 Vue.use(Router)
 
@@ -28,6 +29,10 @@ let router = new Router({
         { 
           path: 'category',
           component: Category,
+        },
+        { 
+          path: 'content',
+          component: Content,
         }
       ]
     }

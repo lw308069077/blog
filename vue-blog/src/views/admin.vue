@@ -20,8 +20,8 @@
           分类管理
         </el-menu-item>
 
-        <el-menu-item @click="$router.push('/admin/category')" index="2">
-          内容管理
+        <el-menu-item @click="$router.push('/admin/content')" index="3">
+          文章管理
         </el-menu-item>
 
         <el-submenu class="rtBox" index="x">
@@ -55,16 +55,17 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
-        let result = this.logOut();
-        this.$router.push('/')
       })
-      .catch(() => {
-        this.$message({
-          type: "info",
-          message: "已取消退出"
+        .then(() => {
+          let result = this.logOut();
+          this.$router.push("/");
         })
-      })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消退出"
+          });
+        });
     }
   }
 };

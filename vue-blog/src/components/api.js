@@ -86,7 +86,6 @@ export default {
       }
     },
     async editCategorySave(param) {
-      console.log(param)
       try {
         let res = await this.$http.post(`/restful/api/category/edit`, param)
         console.log(res.data)
@@ -114,6 +113,16 @@ export default {
       } catch (res) {
         console.log(res)
       }
-    }
+    },
+    /* 文章内容添加 */
+    async addContent(param) {
+      try {
+        let res = await this.$http.post(`/restful/api/content/add`, param)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
   }
 }
