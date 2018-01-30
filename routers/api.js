@@ -61,7 +61,7 @@ router.post('/user/register', (req, res, next) => {
     })
 })
 
-//用户登陆
+// 用户登陆
 router.post('/user/login', (req, res, next) => {
     let username = req.body.username
     let password = req.body.password
@@ -106,7 +106,7 @@ router.post('/user/login', (req, res, next) => {
     })
 })
 
-//用户退出
+// 用户退出
 router.get('/logout',function(req,res,next) {
     res.cookie('user',{},{
         path: '/',
@@ -120,7 +120,7 @@ router.get('/logout',function(req,res,next) {
     res.json(responseData)
 })
 
-//校验登录状态
+// 校验登录状态
 router.get('/checkLogin',function(req,res,next) {
     if(req.cookies.user){
         User.findById(req.userInfo.id).then(function(userInfo){
@@ -140,7 +140,7 @@ router.get('/checkLogin',function(req,res,next) {
     }
 })
 
-//获取用户列表
+// 获取用户列表
 router.get('/user',function(req,res,next){
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
@@ -161,7 +161,7 @@ router.get('/user',function(req,res,next){
     })
 })
 
-//添加分类
+// 添加分类
 router.post('/category/add',function(req,res,next){
     let name = req.body.name || ''
     if(name === ''){
@@ -194,14 +194,14 @@ router.post('/category/add',function(req,res,next){
     })
 })
 
-//分类列表
+// 分类列表
 router.get('/category',function(req,res,next){
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
     let skip = (page - 1) * pageSize
     let params = {}
 
-    let categorieModel = Categorie.find(params).skip(skip).limit(pageSize)
+    let categorieModel = Categorie.find(params).sort({_id:-1}).skip(skip).limit(pageSize)
 
     Categorie.count().then(function(count){
         categorieModel.exec(function(err,doc){
@@ -215,7 +215,7 @@ router.get('/category',function(req,res,next){
     })
 })
 
-//分类修改
+// 分类修改
 router.get('/category/edit',function(req,res,next){
     let id = req.param('id') || ''
 
@@ -264,7 +264,7 @@ router.post('/category/edit',function(req,res,next){
         }
     }).then(function(sameCategory){
         if(sameCategory){
-            responseData.code = 0
+            responseData.code = 1
             responseData.message = '数据库中已存在该分类'
             res.json(responseData)
             return Promise.reject();
@@ -282,6 +282,29 @@ router.post('/category/edit',function(req,res,next){
     })
 })
 
-//分类删除
+// 分类删除
+router.get('/category/delete',function(req,res,next){
+    let id = req.param('id') || ''
+
+    Categorie.remove({
+        _id: id
+    }).then(function(){
+        responseData.code = 0
+        responseData.message = '删除成功'
+        res.json(responseData)
+    })
+
+})
+
+// 分类导航列表
+router.get('/categoryNav',function(req,res,next){
+    Categorie.find().sort({_id:-1}).then(function(doc){
+        res.json({
+            code: 0,
+            message: '',
+            result: doc
+        })
+    })
+})
 
 module.exports = router

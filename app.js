@@ -37,7 +37,7 @@ app.use(function(req,res,next) {
         req.userInfo = req.cookies.user
         next()
     }else{
-        if(req.originalUrl == '/api/user/register' || req.originalUrl == '/api/user/login' || req.originalUrl == '/api/logout') {
+        if(req.originalUrl == '/api/user/register' || req.originalUrl == '/api/user/login' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/categoryNav') {
             next()
         }else{
             res.json({

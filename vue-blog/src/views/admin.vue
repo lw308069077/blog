@@ -16,11 +16,13 @@
           用户管理
         </el-menu-item>
 
-        <el-submenu index="2">
-            <template slot="title">分类管理</template>
-            <el-menu-item index="2-1" @click="$router.push('/admin/category')">分类首页</el-menu-item>
-            <el-menu-item index="2-2" @click="$router.push('/admin/add')">分类添加</el-menu-item>
-        </el-submenu>
+        <el-menu-item @click="$router.push('/admin/category')" index="2">
+          分类管理
+        </el-menu-item>
+
+        <el-menu-item @click="$router.push('/admin/category')" index="2">
+          内容管理
+        </el-menu-item>
 
         <el-submenu class="rtBox" index="x">
             <template slot="title">admin</template>
@@ -44,7 +46,8 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
+      // v-bind:class="{ active: isActive }"
     },
     //退出
     logOuting() {
@@ -54,10 +57,7 @@ export default {
         type: "warning"
       }).then(() => {
         let result = this.logOut();
-        this.$message({
-          type: "success",
-          message: "退出成功!"
-        });        
+        this.$router.push('/')
       })
       .catch(() => {
         this.$message({

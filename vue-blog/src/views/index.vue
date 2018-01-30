@@ -2,12 +2,13 @@
   <div>
       <el-container>
         <el-header>Header</el-header>
+        <nav-list></nav-list>
         <el-main>
             <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :span="16">
                     内容区域
                 </el-col>
-                <el-col class="loginBox" :span="12">
+                <el-col class="loginBox" :span="8">
                     <register></register>
                 </el-col>
             </el-row>
@@ -19,10 +20,12 @@
 
 <script>
 import Register from '@/components/Register'
+import NavList from '@/components/NavList'
 
 export default {
     components:{
-        Register
+        Register,
+        NavList
     },
     data() {
         return {

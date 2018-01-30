@@ -4,8 +4,6 @@ import Index from '@/views/index'
 import Admin from '@/views/admin'
 import UsersList from '@/components/UsersList'
 import Category from '@/components/Category'
-import AddCategory from '@/components/AddCategory'
-
 
 Vue.use(Router)
 
@@ -30,20 +28,6 @@ let router = new Router({
         { 
           path: 'category',
           component: Category,
-          // children: [
-          //   {
-          //     path: '/',
-          //     redirect: 'add'
-          //   },
-          //   {
-          //     path: 'add',
-          //     component: AddCategory
-          //   }
-          // ]
-        },
-        { 
-          path: 'add',
-          component: AddCategory,
         }
       ]
     }

@@ -85,5 +85,35 @@ export default {
         console.log(res)
       }
     },
+    async editCategorySave(param) {
+      console.log(param)
+      try {
+        let res = await this.$http.post(`/restful/api/category/edit`, param)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    /* 删除分类 */
+    async deleteCategory(id) {
+      try {
+        let res = await this.$http.get(`/restful/api/category/delete?id=${id}`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    /* 分类导航列表 */
+    async getCategoryNav() {
+      try {
+        let res = await this.$http.get(`/restful/api/categoryNav`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    }
   }
 }
