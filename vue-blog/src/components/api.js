@@ -124,5 +124,44 @@ export default {
         console.log(res)
       }
     },
+    /* 获取文章内容列表 */
+    async getContent(param) {
+      try {
+        let res = await this.$http.get(`/restful/api/content`,{params: param})
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    /* 修改文章列表 */
+    async editContent(id) {
+      try {
+        let res = await this.$http.get(`/restful/api/content/edit?id=${id}`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    async editContentSave(param) {
+      try {
+        let res = await this.$http.post(`/restful/api/content/edit`, param)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
+    /* 文章分类 */
+    async deleteContent(id) {
+      try {
+        let res = await this.$http.get(`/restful/api/content/delete?id=${id}`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
   }
 }

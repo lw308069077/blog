@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const Categorie = require('../models/Categorie')
+const Content = require('../models/Content')
 
 var responseData
 router.use((req, res, next) => {
@@ -307,9 +308,120 @@ router.get('/categoryNav',function(req,res,next){
     })
 })
 
-// 文章内容保存
+// 添加文章内容
 router.post('/content/add',function(req,res,next){
-    console.log(req.body)
+    if(req.body.category == ''){
+        responseData.code = 1
+        responseData.message = '文章分类不能为空'
+        responseData.url = ''
+        res.json(responseData)
+        return
+    }
+
+    if(req.body.title == ''){
+        responseData.code = 1
+        responseData.message = '文章标题不能为空'
+        responseData.url = ''
+        res.json(responseData)
+        return
+    }
+    // 保存数据到数据库
+    new Content({
+        category: req.body.category,
+        title: req.body.title,
+        user: req.userInfo.id,
+        description: req.body.description,
+        content: req.body.content
+    }).save().then(function(rs){
+        responseData.code = 0
+        responseData.message = '保存成功'
+        res.json(responseData)
+    })
+})
+
+// 文章列表
+router.get('/content',function(req,res,next){
+    let page = parseInt(req.param("page"))
+    let pageSize = parseInt(req.param("pageSize"))
+    let skip = (page - 1) * pageSize
+    let params = {}
+
+    let contentModel = Content.find(params).skip(skip).populate(['category','user']).sort({addTime:-1}).limit(pageSize)
+    
+    Content.count().then(function(count){
+        contentModel.exec(function(err,doc){
+            res.json({
+                code: 0,
+                message: '',
+                result: doc,
+                count: count
+            })
+        })
+    })
+})
+
+// 文章修改
+router.get('/content/edit',function(req,res,next){
+    let id = req.param('id') || ''
+    
+    Content.findOne({
+        _id:id
+    }).populate('category').then(function(content){
+        if(!content){
+            responseData.code = 1
+            responseData.message = '文章内容不存在'
+            res.json(responseData)
+            return Promise.reject();
+        }else{
+            res.json({
+                code: 0,
+                message: '',
+                result: content
+            })
+        }
+    })
+})
+
+router.post('/content/edit',function(req,res,next){
+    let id = req.param('id') || ''
+    if(req.body.category == ''){
+        responseData.code = 1
+        responseData.message = '文章分类不能为空'
+        res.json(responseData)
+        return
+    }
+    if(req.body.title == ''){
+        responseData.code = 1
+        responseData.message = '文章标题不能为空'
+        res.json(responseData)
+        return
+    }
+    Content.update({
+        _id: id
+    },{
+        category: req.body.category,
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content
+    }).then(function(){
+        responseData.code = 0
+        responseData.message = '修改成功'
+        res.json(responseData)
+    })
+})
+
+// 文章删除
+router.get('/content/delete',function(req,res,next){
+    let id = req.param('id') || ''
+
+    Content.remove({
+        _id: id
+    }).then(function(){
+        responseData.code = 0
+        responseData.message = '删除成功'
+        res.json(responseData)
+    })
+
 })
 
 module.exports = router

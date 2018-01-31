@@ -10,8 +10,14 @@
       <div class="tabBox">
         <el-button type="primary" class="addArticle" @click="add">文章添加</el-button>
         <el-table :data="tabaDatas" stripe border show-overflow-tooltip min-width="200">
-            <el-table-column prop="_id" label="ID" show-overflow-tooltip min-width="150"></el-table-column>
-            <el-table-column prop="name" label="文章名称" show-overflow-tooltip min-width="150"></el-table-column>
+            <el-table-column prop="_id" label="ID" show-overflow-tooltip min-width="100"></el-table-column>
+            <el-table-column prop="category.name" label="文章分类" show-overflow-tooltip min-width="80"></el-table-column>
+            <el-table-column prop="title" label="文章标题" show-overflow-tooltip min-width="100"></el-table-column>
+            <el-table-column prop="user.username" label="文章作者" show-overflow-tooltip min-width="100"></el-table-column>
+            <el-table-column prop="addTime" label="添加时间" show-overflow-tooltip min-width="100"></el-table-column>
+            <el-table-column prop="views" label="阅读量" show-overflow-tooltip min-width="100"></el-table-column>
+            <el-table-column prop="description" label="文章简介" show-overflow-tooltip min-width="150"></el-table-column>
+            <el-table-column prop="content" label="文章内容" show-overflow-tooltip min-width="150"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
@@ -33,15 +39,15 @@
       <el-dialog :title="ruleForm.tit" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="formLabelWidth" class="demo-ruleForm">
             <el-form-item label="文章分类">
-                <el-select class="slct" v-model="ruleForm.region" placeholder="请选择文章分类">
+                <el-select class="slct" v-model="ruleForm.category" placeholder="请选择文章分类" @change="changeCategory">
                     <el-option v-for="(option,index) in navList" :label="option.name" :key="index" :value="option._id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章标题">
-                <el-input v-model="ruleForm.name" placeholder="请输入文章标题"></el-input>
+                <el-input v-model="ruleForm.title" placeholder="请输入文章标题"></el-input>
             </el-form-item>
             <el-form-item label="文章简介">
-                <el-input type="textarea" v-model="ruleForm.desc" placeholder="请输入文章简介"></el-input>
+                <el-input type="textarea" v-model="ruleForm.description" placeholder="请输入文章简介"></el-input>
             </el-form-item>
             <el-form-item label="文章内容">
                 <el-input type="textarea" v-model="ruleForm.content" placeholder="请输入文章内容"></el-input>
@@ -64,11 +70,11 @@ export default {
     return {
       ruleForm: {
         tit: '添加文章',
-        name: '',
+        title: '',
         type: 'isAdd',
         id: '',
-        region:'',
-        desc: '',
+        category:'',
+        description: '',
         content: ''
       },
       formLabelWidth: '80px',
@@ -90,7 +96,7 @@ export default {
   },
   async mounted(){
     this.Categorys = await this.getCategoryNav()
-    this.getCategoryList()
+    this.getContentList()
   },
   methods: {
     // 添加/修改分类
@@ -100,21 +106,26 @@ export default {
           resolve(valid);
         });
       });
+      this.navList.forEach((item) => {
+        if(this.ruleForm.category === item.name) {
+          this.ruleForm.category = item._id
+        }
+      })
 
       if (valid) {
         let result
         if(this.ruleForm.type === 'isAdd') {
           result = await this.addContent(this.ruleForm)
         }else{
-          result = await this.editCategorySave(this.ruleForm)
+          result = await this.editContentSave(this.ruleForm)
         }
         if(result.code === 0) {
           this.$message({
-            message: '添加成功',
+            message: result.message,
             type: 'success'
           });
           this.dialogFormVisible = false
-          this.getCategoryList()
+          this.getContentList()
         }else{
           this.$message({
             message: result.message,
@@ -127,42 +138,48 @@ export default {
       }
     },
     // 获取分类列表
-    async getCategoryList(){
+    async getContentList(){
         let param = {
           page: this.pageNo,
           pageSize: this.pageSize
         }
-        this.datas = await this.getCategory(param)
+        this.datas = await this.getContent(param)
     },
     // 分页设置
     handleSizeChange (val) {
       this.pageSize = val
       this.pageNo = 1
-      this.getCategoryList()
+      this.getContentList()
     },
     // 分页设置
     handleCurrentChange (val) {
       this.pageNo = val
-      this.getCategoryList()
+      this.getContentList()
     },
     // 添加
     add() {
       this.ruleForm = {
-        tit: '添加分类',
-        name: '',
+        tit: '添加文章',
+        title: '',
         type: 'isAdd',
-        id: ''
+        id: '',
+        category:'',
+        description: '',
+        content: ''
       }
       this.dialogFormVisible = true
     },
     // 编辑
     async edit(row) {
-      let result = await this.editCategory(row._id)
+      let result = await this.editContent(row._id)
       this.ruleForm = {
-        tit: '编辑分类',
-        name: result.result.name,
+        tit: '编辑文章',
+        title: result.result.title,
         type: 'isEdit',
-        id: <row class="_id"></row>
+        id: result.result._id,
+        category:result.result.category.name,
+        description: result.result.description,
+        content: result.result.content
       }
       this.dialogFormVisible = true
     },
@@ -173,18 +190,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteCategory(row._id)
+        this.deleteContent(row._id)
         this.$message({
           type: 'success',
           message: '删除成功!'
         });
-        this.getCategoryList()
+        this.getContentList()
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
         });          
       });
+    },
+    // 切换列表
+    changeCategory(val){
+      this.ruleForm.category = val
     }
   },
   watch: {

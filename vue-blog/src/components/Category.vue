@@ -93,7 +93,7 @@ export default {
         }
         if(result.code === 0) {
           this.$message({
-            message: '添加成功',
+            message: result.message,
             type: 'success'
           });
           this.dialogFormVisible = false
@@ -145,7 +145,7 @@ export default {
         tit: '编辑分类',
         name: result.result.name,
         type: 'isEdit',
-        id: <row class="_id"></row>
+        id: result.result._id
       }
       this.dialogFormVisible = true
     },

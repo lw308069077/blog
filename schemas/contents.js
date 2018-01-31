@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const moment = require('moment')
 
 //文章的表结构
 module.exports = new mongoose.Schema({
@@ -7,10 +8,27 @@ module.exports = new mongoose.Schema({
         //类型
         type: mongoose.Schema.Types.ObjectId,
         //引用
-        ref: 'Content'
+        ref: 'Category'
     },
     //文章标题
     title: String,
+    //关联字段 - 用户id
+    user: {
+        //类型
+        type: mongoose.Schema.Types.ObjectId,
+        //引用
+        ref: 'User'
+    },
+    //添加时间
+    addTime: {
+        type:Date,
+        default: new Date()
+    },
+    //阅读量
+    views: {
+        type: Number,
+        default: 0
+    },
     //文章简介
     description: {
         type: String,
@@ -22,3 +40,5 @@ module.exports = new mongoose.Schema({
         default: ''
     }
 })
+
+
