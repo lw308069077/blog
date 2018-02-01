@@ -21,7 +21,7 @@ module.exports = new mongoose.Schema({
     },
     //添加时间
     addTime: {
-        type:Date,
+        type: Date,
         default: new Date()
     },
     //阅读量
