@@ -2,12 +2,12 @@
   <div>
       <el-container>
         <el-header>Header</el-header>
-        <nav-list></nav-list>
+        <nav-list v-on:contentList="getContentListById"></nav-list>
 
         <el-container>
             <el-main>
                 <ul>
-                    <li v-for="item in tabaDatas">
+                    <li v-for="(item,index) in tabaDatas" :key="index">
                         <h3>{{item.title}}</h3>
                         <p class="sx">作者：<span>{{item.user.username}}</span> - 时间：<span>{{item.addTime}}</span> - 阅读量：<span>{{item.views}}</span> - 评论：<span>10</span></p>
                         <p class="left">{{item.description}}</p>
@@ -40,19 +40,30 @@ export default {
         return {
             pageNo: 1, // 当前页码
             pageSize: 999, // 每页记录数
+            category:'',
             datas:{},
             tabaDatas: [],
         }
     },
     async mounted(){
         this.getContentList()
+
+        // this.$root.$on('propsId', function(id){
+        //     // console.log('我是由组件1传过来的' + id)
+        //     this.category = id
+        // })
     },
     methods: {
+        getContentListById(item){
+            this.category = item._id
+            this.getContentList()
+        },
         // 获取分类列表
         async getContentList(){
             let param = {
-                // page: this.pageNo,
-                // pageSize: this.pageSize
+                page: this.pageNo,
+                pageSize: this.pageSize,
+                category: this.category
             }
 
             this.datas = await this.getContent(param)
@@ -63,7 +74,10 @@ export default {
             this.tabaDatas = this.datas.result
             this.total = this.datas.count
         }
-    }
+    },
+    // destroyed: function () {
+    //     console.group('destroyed 销毁完成状态===============》');
+    // }
 }
 </script>
 

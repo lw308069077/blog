@@ -341,12 +341,18 @@ router.post('/content/add',function(req,res,next){
 
 // 文章列表
 router.get('/content',function(req,res,next){
+    let category = req.param("category") || ''
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
     let skip = (page - 1) * pageSize
     let params = {}
+    let where = {}
 
-    let contentModel = Content.find(params).skip(skip).populate(['category','user']).sort({addTime:-1}).limit(pageSize)
+    if(category){
+        where.category = category
+    }
+console.log(category)
+    let contentModel = Content.where(where).find(params).skip(skip).populate(['category','user']).sort({addTime:-1}).limit(pageSize)
 
     Content.count().then(function(count){
         contentModel.exec(function(err,doc){

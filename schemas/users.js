@@ -7,5 +7,8 @@ module.exports = new mongoose.Schema({
     //密码
     password: String,
     //是否是管理员
-    isAdmin: String
+    isAdmin: {
+        type: String,
+        default: 'false'
+    }
 })
