@@ -1,45 +1,21 @@
 <template>
-  <div>
-      <el-container>
-        <el-header>Header</el-header>
-        <nav-list v-on:contentList="getContentListById"></nav-list>
-
-        <el-container>
-            <el-main>
-                <ul>
-                    <li v-for="(item,index) in tabaDatas" :key="index">
-                        <h3>{{item.title}}</h3>
-                        <p class="sx">作者：<span>{{item.user.username}}</span> - 时间：<span>{{item.addTime}}</span> - 阅读量：<span>{{item.views}}</span> - 评论：<span>10</span></p>
-                        <p class="left">{{item.description}}</p>
-                        <p class="left"><el-button type="primary" @click="$router.push({path:'/content/view',query:{contentId: item._id}})">阅读全文</el-button></p>
-                    </li>
-                </ul>
-            </el-main>
-            <el-aside width="400px">
-                <register></register>
-            </el-aside>
-        </el-container>
-  
-        <el-footer>Footer</el-footer>
-      </el-container>
-  </div>
+    <ul>
+        <li v-for="(item,index) in tabaDatas" :key="index">
+            <h3>{{item.title}}</h3>
+            <p class="sx">作者：<span>{{item.user.username}}</span> - 时间：<span>{{item.addTime}}</span> - 阅读量：<span>{{item.views}}</span> - 评论：<span>10</span></p>
+            <p class="left">{{item.description}}</p>
+            <p class="left"><el-button type="primary" @click="$router.push({path:'/content/view',query:{contentId: item._id}})">阅读全文</el-button></p>
+        </li>
+    </ul>
 </template>
 
 <script>
-import Register from '@/components/Register'
-import NavList from '@/components/NavList'
 import api from "@/components/api";
 
 export default {
     mixins: [api],
-    components:{
-        Register,
-        NavList
-    },
     data() {
         return {
-            pageNo: 1, // 当前页码
-            pageSize: 999, // 每页记录数
             category:'',
             datas:{},
             tabaDatas: [],
@@ -69,10 +45,7 @@ export default {
             this.tabaDatas = this.datas.result
             this.total = this.datas.count
         }
-    },
-    // destroyed: function () {
-    //     console.group('destroyed 销毁完成状态===============》');
-    // }
+    }
 }
 </script>
 

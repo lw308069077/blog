@@ -163,5 +163,15 @@ export default {
         console.log(res)
       }
     },
+    /* 阅读全文 */
+    async viewContent(id) {
+      try {
+        let res = await this.$http.get(`/restful/api/content/view?contentId=${id}`)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    },
   }
 }

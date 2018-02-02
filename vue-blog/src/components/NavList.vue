@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">首页</el-menu-item>
+        <el-menu-item index="1" @click="getId('')">首页</el-menu-item>
         <el-menu-item v-for="(item, key) in navList" :index="(key+2)+''" :key="key" @click="getId(item)">{{item.name}}</el-menu-item>
       </el-menu>
       

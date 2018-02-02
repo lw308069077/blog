@@ -351,7 +351,7 @@ router.get('/content',function(req,res,next){
     if(category){
         where.category = category
     }
-console.log(category)
+
     let contentModel = Content.where(where).find(params).skip(skip).populate(['category','user']).sort({addTime:-1}).limit(pageSize)
 
     Content.count().then(function(count){
@@ -428,6 +428,22 @@ router.get('/content/delete',function(req,res,next){
         res.json(responseData)
     })
 
+})
+
+// 阅读全文
+router.get('/content/view',function(req,res,next){
+    let contentId = req.param('contentId') || ''
+
+    Content.findOne({
+        _id: contentId
+    }).then(function(content){
+        console.log(content)
+        res.json({
+            code: 0,
+            message: '',
+            result: content
+        })
+    })
 })
 
 module.exports = router
