@@ -5,7 +5,6 @@ import Admin from '@/views/admin'
 import UsersList from '@/components/UsersList'
 import Category from '@/components/Category'
 import Content from '@/components/Content'
-import View from '@/components/View'
 
 Vue.use(Router)
 
@@ -36,9 +35,6 @@ let router = new Router({
           component: Content,
         }
       ]
-    },{
-      path: '/view',
-      component: View
     }
   ]
 })

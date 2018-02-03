@@ -437,7 +437,9 @@ router.get('/content/view',function(req,res,next){
     Content.findOne({
         _id: contentId
     }).then(function(content){
-        console.log(content)
+        content.views++
+        content.save()
+        
         res.json({
             code: 0,
             message: '',
