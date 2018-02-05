@@ -173,5 +173,15 @@ export default {
         console.log(res)
       }
     },
+    /* 提交评论 */
+    async postComment(param) {
+      try {
+        let res = await this.$http.post(`/restful/api/content/post`, param)
+        console.log(res.data)
+        return res.data
+      } catch (res) {
+        console.log(res)
+      }
+    }
   }
 }

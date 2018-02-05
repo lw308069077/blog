@@ -20,17 +20,28 @@
                         <h3>{{contentDatas.title}}</h3>
                         <p class="sx">作者：<span>{{contentDatas.user}}</span> - 时间：<span>{{contentDatas.addTime}}</span> - 阅读量：<span>{{contentDatas.views}}</span> - 评论：<span>10</span></p>
                         <p class="left">{{contentDatas.description}}</p>
+                        <p class="left">{{contentDatas.content}}</p>
                     </div>
                     <div class="contentBox">
                         <h3 class="title">评论<span class="commentNum">一共有10条评论</span></h3>
                         <el-form ref="form" :model="form" label-width="80px">
                             <el-form-item label="">
-                                <el-input type="textarea" v-model="form.desc"></el-input>
+                                <el-input type="textarea" v-model="form.comment"></el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="">提交评论</el-button>
+                                <el-button type="primary" @click="subComment">提交评论</el-button>
                             </el-form-item>
                         </el-form>
+                        <ul class="commentBox">
+                          <li>
+                            <div class="user">
+                              123：
+                            </div>
+                            <div class="comment">
+                              这是我的评论第一条！~
+                            </div>
+                          </li>    
+                        </ul>
                     </div>
                 </div>
             </el-main>
@@ -65,8 +76,9 @@ export default {
       datas: {},
       tabaDatas: [],
       form: {
-          desc: ''
-        }
+        comment: '',
+        contentId: '',
+      }
     };
   },
   async mounted() {
@@ -76,6 +88,7 @@ export default {
     // 阅读全文
     async readMore(id) {
       let res = await this.viewContent(id);
+      this.form.contentId = id
       if (res.code === 0) {
         this.contentDatas = res.result;
         this.isContent = false;
@@ -101,6 +114,16 @@ export default {
       };
       this.datas = await this.getContent(param);
       this.isContent = true;
+    },
+    // 提交评论
+    async subComment() {
+      let param = {
+        contentId: this.form.contentId,
+        content: this.form.comment,
+      }
+      console.log(param)
+      let res = await this.postComment(param)
+      console.log(res,'============================')
     }
   },
   watch: {
@@ -176,5 +199,22 @@ body > .el-container {
     font-size:12px;
     font-weight: 500;
     float:right;
+}
+.author {
+  text-align: left;
+}
+.el-main .contentBox .commentBox li {
+  padding: 0;
+  text-align: left;
+  margin-bottom: 20px;
+}
+.commentBox li .user {
+  width: 80px;
+  float: left;
+  
+}
+.commentBox li .comment {
+  margin-left: 80px;
+  margin-right: 200px;
 }
 </style>

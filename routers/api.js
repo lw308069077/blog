@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 })
 
 // 用户注册
-router.post('/user/register', (req, res, next) => {
+router.post('/user/register', (req, res) => {
     let username = req.body.username
     let password = req.body.password
     let repassword = req.body.repassword
@@ -63,7 +63,7 @@ router.post('/user/register', (req, res, next) => {
 })
 
 // 用户登陆
-router.post('/user/login', (req, res, next) => {
+router.post('/user/login', (req, res) => {
     let username = req.body.username
     let password = req.body.password
 
@@ -108,7 +108,7 @@ router.post('/user/login', (req, res, next) => {
 })
 
 // 用户退出
-router.get('/logout',function(req,res,next) {
+router.get('/logout',function(req,res) {
     res.cookie('user',{},{
         path: '/',
         maxAge: -1
@@ -122,7 +122,7 @@ router.get('/logout',function(req,res,next) {
 })
 
 // 校验登录状态
-router.get('/checkLogin',function(req,res,next) {
+router.get('/checkLogin',function(req,res) {
     if(req.cookies.user){
         User.findById(req.userInfo.id).then(function(userInfo){
             req.userInfo.isAdmin = userInfo.isAdmin
@@ -142,7 +142,7 @@ router.get('/checkLogin',function(req,res,next) {
 })
 
 // 获取用户列表
-router.get('/user',function(req,res,next){
+router.get('/user',function(req,res){
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
     let skip = (page - 1) * pageSize
@@ -163,7 +163,7 @@ router.get('/user',function(req,res,next){
 })
 
 // 添加分类
-router.post('/category/add',function(req,res,next){
+router.post('/category/add',function(req,res){
     let name = req.body.name || ''
     if(name === ''){
         responseData.code = 1
@@ -196,7 +196,7 @@ router.post('/category/add',function(req,res,next){
 })
 
 // 分类列表
-router.get('/category',function(req,res,next){
+router.get('/category',function(req,res){
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
     let skip = (page - 1) * pageSize
@@ -217,7 +217,7 @@ router.get('/category',function(req,res,next){
 })
 
 // 分类修改
-router.get('/category/edit',function(req,res,next){
+router.get('/category/edit',function(req,res){
     let id = req.param('id') || ''
 
     Categorie.findOne({
@@ -238,7 +238,7 @@ router.get('/category/edit',function(req,res,next){
     })
 })
 
-router.post('/category/edit',function(req,res,next){
+router.post('/category/edit',function(req,res){
     let id = req.param('id') || ''
     let name = req.body.name || ''
 
@@ -284,7 +284,7 @@ router.post('/category/edit',function(req,res,next){
 })
 
 // 分类删除
-router.get('/category/delete',function(req,res,next){
+router.get('/category/delete',function(req,res){
     let id = req.param('id') || ''
 
     Categorie.remove({
@@ -298,7 +298,7 @@ router.get('/category/delete',function(req,res,next){
 })
 
 // 分类导航列表
-router.get('/categoryNav',function(req,res,next){
+router.get('/categoryNav',function(req,res){
     Categorie.find().sort({_id:-1}).then(function(doc){
         res.json({
             code: 0,
@@ -309,7 +309,7 @@ router.get('/categoryNav',function(req,res,next){
 })
 
 // 添加文章内容
-router.post('/content/add',function(req,res,next){
+router.post('/content/add',function(req,res){
     if(req.body.category == ''){
         responseData.code = 1
         responseData.message = '文章分类不能为空'
@@ -340,7 +340,7 @@ router.post('/content/add',function(req,res,next){
 })
 
 // 文章列表
-router.get('/content',function(req,res,next){
+router.get('/content',function(req,res){
     let category = req.param("category") || ''
     let page = parseInt(req.param("page"))
     let pageSize = parseInt(req.param("pageSize"))
@@ -367,7 +367,7 @@ router.get('/content',function(req,res,next){
 })
 
 // 文章修改
-router.get('/content/edit',function(req,res,next){
+router.get('/content/edit',function(req,res){
     let id = req.param('id') || ''
     
     Content.findOne({
@@ -388,7 +388,7 @@ router.get('/content/edit',function(req,res,next){
     })
 })
 
-router.post('/content/edit',function(req,res,next){
+router.post('/content/edit',function(req,res){
     let id = req.param('id') || ''
     if(req.body.category == ''){
         responseData.code = 1
@@ -417,7 +417,7 @@ router.post('/content/edit',function(req,res,next){
 })
 
 // 文章删除
-router.get('/content/delete',function(req,res,next){
+router.get('/content/delete',function(req,res){
     let id = req.param('id') || ''
 
     Content.remove({
@@ -431,7 +431,7 @@ router.get('/content/delete',function(req,res,next){
 })
 
 // 阅读全文
-router.get('/content/view',function(req,res,next){
+router.get('/content/view',function(req,res){
     let contentId = req.param('contentId') || ''
 
     Content.findOne({
@@ -446,6 +446,33 @@ router.get('/content/view',function(req,res,next){
             result: content
         })
     })
+})
+
+// 评论提交
+router.post('/content/post',function(req,res){
+    //内容的id
+    let contentId = req.param('contentId') || ''
+    let postData = {
+        username: req.userInfo.name,
+        postTime: new Date(),
+        content: req.param('content')
+    }
+    
+    //查询当前这篇内容的信息
+    Content.findOne({
+        _id: contentId
+    }).then(function(content){
+        content.comments.push(postData)
+        content.save()
+    })
+    // .then(function(newContent){
+    //     console.log(11111111111112)
+    //     res.json({
+    //         code: 0,
+    //         message: '评论成功',
+    //         result: newContent
+    //     })
+    // })
 })
 
 module.exports = router
